@@ -7,13 +7,13 @@ import urllib2
 
 def exibe_lista(url):
     html = urllib2.urlopen(url).read()
-    itens = re.findall(r'<td class="result_text"> <a href="(.+?)".*?>(.+?)</td>', html)
+    itens = re.findall(r'<td class="primary_photo">.*?<img.*?src="(.+?)".*?></a> </td>.*?<td class="result_text"> <a href="(.+?)".*?>(.+?)</td>', html)
     if len(itens) > 0:
-        for link, item in itens:
+        for img, link, item in itens:
             item = re.sub('<small>.+?</small>', '',item) # Remove tag small
             item = re.sub('<[^>]*>', '', item) # Remove tags e seus conteúdos
             if not re.match(r'/name/nm.+?', link): # Somente Titles
-                print 'TÍTULO: {0}\nLINK: {1}\n'.format(item, link)
+                print 'TÍTULO: {0}\nLINK: {1}\nIMAGEM: {2}\n'.format(item, link, img)
     else:
         print 'Nenhum resultado encontrado'
 
