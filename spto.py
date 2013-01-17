@@ -5,9 +5,9 @@ import threading
 import time
 import urllib2
 
-def exibe_lista(url='http://www.imdb.com/find?q=O+Hobbit'):
+def exibe_lista(url):
     html = urllib2.urlopen(url).read()
-    itens = re.findall(r'<td class="result_text"> <a href="(.+?)".+?>(.+?)</td>', html)
+    itens = re.findall(r'<td class="result_text"> <a href="(.+?)".*?>(.+?)</td>', html)
     if len(itens) > 0:
         for link, item in itens:
             item = re.sub('<small>.+?</small>', '',item) # Remove tag small
