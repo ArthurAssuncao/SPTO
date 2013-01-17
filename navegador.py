@@ -7,7 +7,7 @@ import json
 import settings
 
 def estrutura_resultado(filmes):
-    conteudo = open('titulos.html', 'r').read()
+    conteudo = open('titulos.html', 'r').read() 
     lista = []
     for filme in filmes['filmes']:
         item = '<li class="well well-small titulo"><img src="{img}" height="44" width="32" /><span>{titulo}</span></li>'.format(img=filme['imagem'], url=filme['link'], titulo=filme['titulo'])

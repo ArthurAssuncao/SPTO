@@ -10,7 +10,7 @@ def exibe_lista(url):
     itens = re.findall(r'<td class="primary_photo">.*?<img.*?src="(.+?)".*?></a> </td>.*?<td class="result_text"> <a href="(.+?)".*?>(.+?)</td>', html)
     filmes = {'filmes' : []}
     if len(itens) > 0:
-        for img, link, titulo in itens:
+        for img, link, titulo in itens: 
             titulo = re.sub('<small>.+?</small>', '',titulo) # Remove tag small
             titulo = re.sub('<[^>]*>', '', titulo) # Remove tags e seus conteúdos
             if not re.match(r'/name/nm.+?', link): # Somente Titles
