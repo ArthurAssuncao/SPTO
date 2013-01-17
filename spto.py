@@ -8,14 +8,18 @@ import urllib2
 def exibe_lista(url):
     html = urllib2.urlopen(url).read()
     itens = re.findall(r'<td class="primary_photo">.*?<img.*?src="(.+?)".*?></a> </td>.*?<td class="result_text"> <a href="(.+?)".*?>(.+?)</td>', html)
+    filmes = {'filmes' : []}
     if len(itens) > 0:
-        for img, link, item in itens:
-            item = re.sub('<small>.+?</small>', '',item) # Remove tag small
-            item = re.sub('<[^>]*>', '', item) # Remove tags e seus conteúdos
+        for img, link, titulo in itens:
+            titulo = re.sub('<small>.+?</small>', '',titulo) # Remove tag small
+            titulo = re.sub('<[^>]*>', '', titulo) # Remove tags e seus conteúdos
             if not re.match(r'/name/nm.+?', link): # Somente Titles
-                print 'TÍTULO: {0}\nLINK: {1}\nIMAGEM: {2}\n'.format(item, link, img)
+               filme = {'titulo' : titulo, 'link' : link, 'imagem' : img}
+               filmes['filmes'].append(filme)
+        resposta = 200
     else:
-        print 'Nenhum resultado encontrado'
+        resposta = 404
+    return resposta, filmes
 
 def gera_url(pesquisa):
     pesquisa = pesquisa.strip()
@@ -24,6 +28,10 @@ def gera_url(pesquisa):
         return 'http://www.imdb.com/find?q={0}'.format(pesquisa)
     else:
         return None
+        
+def busca(texto):
+  url = gera_url(texto)
+  return exibe_lista(url)
 
 if __name__ == "__main__":
     pesquisa = raw_input('Buscar: ')
