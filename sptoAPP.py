@@ -15,6 +15,7 @@ class sptoAPP:
         win.set_title('SPTO - Sistema de Pesquisa de Títulos Online')
         win.set_size_request(800, 600)
         win.set_position(gtk.WIN_POS_CENTER)
+        win.set_resizable(False)
 
         vbox = gtk.VBox(False, 2)
         hbox = gtk.HBox()
@@ -41,13 +42,13 @@ class sptoAPP:
         hbox.pack_start(btBuscar, False, False, 1)
 
         # Recebimento da resposta de busca
-        resposta, conteudo = spto.busca('Matrix')
-
+        resposta, conteudo = spto.busca('\'')
         if resposta == 200:
             conteudo = self.estrutura_resultado(conteudo)
         elif resposta == 404:
-            conteudo = 'Nenhum resultado encontrado'
+            conteudo = self.estrutura_resultado(None)
 
+        # Carrega conteúdo da página
         view.load_html_string(conteudo, settings.URL_BASE)
 
         # Barra de Rolagem
@@ -56,23 +57,29 @@ class sptoAPP:
         textview = gtk.TextView()
         scrolledwindow.add(view)
 
+        # Adicionar hbox e scrolledwindow
         vbox.pack_start(hbox, False, False, 0)
         vbox.pack_end(scrolledwindow, True, True, 0)
 
         win.add(vbox)
-        win.connect("destroy", gtk.main_quit)
+        win.connect("destroy", gtk.main_quit) # Fechar ao clicar
         win.show_all()
 
     def estrutura_resultado(self, filmes):
-        conteudo = open('titulos.html', 'r').read() 
-        lista = []
-        for filme in filmes['filmes']:
-            item = '<li class="well well-small titulo"><img src="{img}" height="44" width="32" /><span>{titulo}</span></li>'.format(img=filme['imagem'], url=filme['link'], titulo=filme['titulo'])
-            lista.append(item)
-        
-        texto_conteudo = '<br>'.join(lista)
-        conteudo = conteudo % texto_conteudo
-        return conteudo
+        if filmes == None:
+            conteudo = open('naoEncontrado.html', 'r').read() 
+            return conteudo
+        else:
+            conteudo = open('titulos.html', 'r').read() 
+            lista = []
+            for filme in filmes['filmes']:
+                item = '<li class="well well-small titulo"><img src="{img}" height="44" width="32" /><span>{titulo}</span></li>'.format(img=filme['imagem'], url=filme['link'], titulo=filme['titulo'])
+                lista.append(item)
+            
+            texto_conteudo = '<br>'.join(lista)
+            conteudo = conteudo % texto_conteudo
+            return conteudo
 
-sptoAPP()
-gtk.main()
+if __name__ == "__main__":
+    sptoAPP()
+    gtk.main()
