@@ -5,7 +5,7 @@ import threading
 import time
 import urllib2
 
-def exibe_lista(url):
+def retorna_lista(url):
     html = urllib2.urlopen(url).read()
     itens = re.findall(r'<td class="primary_photo">.*?<img.*?src="(.+?)".*?></a> </td>.*?<td class="result_text"> <a href="(.+?)".*?>(.+?)</td>', html)
     filmes = {'filmes' : []}
@@ -31,13 +31,13 @@ def gera_url(pesquisa):
         
 def busca(texto):
   url = gera_url(texto)
-  return exibe_lista(url)
+  return retorna_lista(url)
 
 if __name__ == "__main__":
     pesquisa = raw_input('Buscar: ')
     url = gera_url(pesquisa)
     if url:
-        exibe_lista(url)
+        retorna_lista(url)
     else:
         print 'Campo de Busca vazio'
     

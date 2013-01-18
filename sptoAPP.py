@@ -7,6 +7,10 @@ import gobject
 import spto
 import json
 import settings
+import re
+import threading
+import time
+import urllib2
 
 class sptoAPP:
     def __init__(self):
@@ -88,7 +92,7 @@ class sptoAPP:
             print 'Realizando pesquisa para "{}"'.format(busca)
             self.buscaAtual = busca
             # Recebimento da resposta de busca
-            resposta, conteudo = spto.busca(busca)
+            resposta, conteudo = self.busca(busca)
             if resposta == 200:
                 conteudo = self.estrutura_resultado(conteudo)
             elif resposta == 404:
@@ -109,6 +113,34 @@ class sptoAPP:
             texto_conteudo = '<br>'.join(lista)
             conteudo = conteudo % texto_conteudo
             return conteudo
+
+    def retorna_lista(self, url):
+        html = urllib2.urlopen(url).read()
+        itens = re.findall(r'<td class="primary_photo">.*?<img.*?src="(.+?)".*?></a> </td>.*?<td class="result_text"> <a href="(.+?)".*?>(.+?)</td>', html)
+        filmes = {'filmes' : []}
+        if len(itens) > 0:
+            for img, link, titulo in itens: 
+                titulo = re.sub('<small>.+?</small>', '',titulo) # Remove tag small
+                titulo = re.sub('<[^>]*>', '', titulo) # Remove tags e seus conteúdos
+                if not re.match(r'/name/nm.+?', link): # Somente Titles
+                   filme = {'titulo' : titulo, 'link' : link, 'imagem' : img}
+                   filmes['filmes'].append(filme)
+            resposta = 200
+        else:
+            resposta = 404
+        return resposta, filmes
+
+    def gera_url(self, pesquisa):
+        pesquisa = pesquisa.strip()
+        pesquisa = pesquisa.replace(' ', '+')
+        if len(pesquisa) > 0:
+            return 'http://www.imdb.com/find?q={0}'.format(pesquisa)
+        else:
+            return None
+            
+    def busca(self, texto):
+      url = self.gera_url(texto)
+      return self.retorna_lista(url)
 
 if __name__ == "__main__":
     sptoAPP()
