@@ -20,13 +20,10 @@ def estrutura_resultado(filmes):
 view = webkit.WebView() 
 
 win = gtk.Window(gtk.WINDOW_TOPLEVEL)
-win.width = 500
-win.height = 300
 
 view = webkit.WebView()
 
-resposta, conteudo = spto.busca('lord of the rings')
-#resposta, conteudo = spto.busca('sempre ao seu lado')
+resposta, conteudo = spto.busca('Sempre ao seu lado')
 if resposta == 200:
     conteudo = estrutura_resultado(conteudo)
 elif resposta == 404:
@@ -34,7 +31,14 @@ elif resposta == 404:
 
 view.load_html_string(conteudo, settings.URL_BASE)
 
-win.add(view)
+win.set_size_request(800, 600)
+win.set_position(gtk.WIN_POS_CENTER)
+
+scrolledwindow = gtk.ScrolledWindow()
+scrolledwindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
+textview = gtk.TextView()
+win.add(scrolledwindow)
+scrolledwindow.add(view)
 win.show_all()
 
 gtk.main()
