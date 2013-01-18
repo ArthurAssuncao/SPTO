@@ -103,7 +103,7 @@ class sptoAPP:
             conteudo = open('titulos.html', 'r').read() 
             lista = []
             for filme in filmes['filmes']:
-                item = '<a href="http://graph.facebook.com/http://www.imdb.com{url}"><li class="well well-small titulo"><img src="http://www.imdb.com{img}" height="44" width="32" /><span>{titulo}</span></li></a>'.format(
+                item = '<a href="http://graph.facebook.com/http://www.imdb.com{url}"><li class="well well-small titulo"><img src="{img}" height="44" width="32" /><span>{titulo}</span></li></a>'.format(
                     img=filme['imagem'], url=filme['link'], titulo=filme['titulo'])
                 lista.append(item)
             texto_conteudo = '<br>'.join(lista)
