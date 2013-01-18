@@ -8,7 +8,7 @@ import spto
 import json
 import settings
 
-class stpoAPP:
+class sptoAPP:
     def __init__(self):
         view = webkit.WebView() 
         win = gtk.Window(gtk.WINDOW_TOPLEVEL)
@@ -74,5 +74,5 @@ class stpoAPP:
         conteudo = conteudo % texto_conteudo
         return conteudo
 
-stpoAPP()
+sptoAPP()
 gtk.main()
