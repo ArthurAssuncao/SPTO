@@ -12,6 +12,7 @@ class sptoAPP:
     def __init__(self):
         self.buscaAtual = '' # armazena o conteúdo pesquisado atualmente
         self.view = webkit.WebView() 
+        self.view.connect("navigation-requested", self.on_click_link)
         win = gtk.Window(gtk.WINDOW_TOPLEVEL)
         win.set_title('SPTO - Sistema de Pesquisa de Títulos Online')
         win.set_size_request(800, 600)
@@ -40,13 +41,13 @@ class sptoAPP:
 
         # Campo de busca
         labelTitulo = gtk.Label('Título:')
-        campoBuscar = gtk.Entry()
-        campoBuscar.connect("activate", self.buscar, campoBuscar)
+        self.campoBuscar = gtk.Entry()
+        self.campoBuscar.connect("activate", self.buscar)
         btBuscar = gtk.Button('Buscar')
-        btBuscar.connect("clicked", self.buscar, campoBuscar)
+        btBuscar.connect("clicked", self.buscar)
         btBuscar.set_size_request(80, 25)
         hbox.pack_start(labelTitulo, False, False, 5)
-        hbox.pack_start(campoBuscar, True, True, 0)
+        hbox.pack_start(self.campoBuscar, True, True, 0)
         hbox.pack_start(btBuscar, False, False, 1)
 
         # Barra de Rolagem na webView
@@ -63,8 +64,24 @@ class sptoAPP:
         win.connect("destroy", gtk.main_quit) # Fechar ao clicar
         win.show_all()
 
-    def buscar(self, button, campoBuscar):
-        busca = campoBuscar.get_text()
+    def on_click_link(self, view, frame, req, data=None):
+        """Describes what to do when a href link is clicked"""
+
+        # As Ryan Paul stated he likes to use the prefix program:/ if the
+        # link is being used like a button, the else will catch true links
+        # and open them in the webbrowser
+        uri = req.get_uri()
+        if uri.startswith("file:///"):
+            self.buscar(None)
+            return False
+        elif uri.startswith("program:/"):
+            print uri.split("/")[1]
+        else: 
+            print uri
+        return True
+
+    def buscar(self, button):
+        busca = self.campoBuscar.get_text()
         if len(busca) == 0 or self.buscaAtual == busca:
             pass
         else:
@@ -86,7 +103,8 @@ class sptoAPP:
             conteudo = open('titulos.html', 'r').read() 
             lista = []
             for filme in filmes['filmes']:
-                item = '<li class="well well-small titulo"><img src="{img}" height="44" width="32" /><span>{titulo}</span></li>'.format(img=filme['imagem'], url=filme['link'], titulo=filme['titulo'])
+                item = '<a href="http://graph.facebook.com/http://www.imdb.com{url}"><li class="well well-small titulo"><img src="http://www.imdb.com{img}" height="44" width="32" /><span>{titulo}</span></li></a>'.format(
+                    img=filme['imagem'], url=filme['link'], titulo=filme['titulo'])
                 lista.append(item)
             texto_conteudo = '<br>'.join(lista)
             conteudo = conteudo % texto_conteudo
