@@ -4,7 +4,6 @@ import gtk
 import webkit 
 import thread
 import gobject
-import spto
 import json
 import settings
 import re
@@ -69,11 +68,11 @@ class sptoAPP:
         win.show_all()
 
     def on_click_link(self, view, frame, req, data=None):
-        """Describes what to do when a href link is clicked"""
+        '''
+        Listener para links. 
+        Toda vez que um link é clicado no webView, ele é chamado.
+        '''
 
-        # As Ryan Paul stated he likes to use the prefix program:/ if the
-        # link is being used like a button, the else will catch true links
-        # and open them in the webbrowser
         uri = req.get_uri()
         if uri.startswith("file:///"):
             self.buscar(None)
