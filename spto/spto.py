@@ -17,7 +17,7 @@ class spto:
     def __init__(self):
         self.buscaAtual = '' # armazena o conteúdo pesquisado atualmente
         self.view = webkit.WebView() 
-        self.view.connect("navigation-requested", self.on_click_link)
+        self.view.connect('navigation-requested', self.on_click_link)
         win = gtk.Window(gtk.WINDOW_TOPLEVEL)
         win.set_title('SPTO - Sistema de Pesquisa de Títulos Online')
         win.set_size_request(800, 600)
@@ -30,17 +30,24 @@ class spto:
         # Barra de menu
         menuBar = gtk.MenuBar()
         menuArquivo = gtk.Menu()
-        arquivo = gtk.MenuItem("Arquivo")
+        arquivo = gtk.MenuItem('Arquivo')
         arquivo.set_submenu(menuArquivo)
+
+        limpar = gtk.MenuItem('Limpar pesquisa')
+        limpar.connect('activate', self.limparWebView)
+        menuArquivo.append(limpar)
+
+        sep = gtk.SeparatorMenuItem()
+        menuArquivo.append(sep)
         
         sair = gtk.ImageMenuItem(gtk.STOCK_QUIT)
-        sair.connect("activate", gtk.main_quit)
+        sair.connect('activate', gtk.main_quit)
         menuArquivo.append(sair)
 
         menuCreditos = gtk.Menu()
-        sobre = gtk.MenuItem("Sobre")
+        sobre = gtk.MenuItem('Sobre')
         sobre.set_submenu(menuCreditos)
-        sobre.connect("activate", self.sobre)
+        sobre.connect('activate', self.sobre)
         menuBar.append(arquivo)
         menuBar.append(sobre)
         vbox.pack_start(menuBar, False, False, 0)
@@ -48,7 +55,7 @@ class spto:
         # Campo de busca
         labelTitulo = gtk.Label('Título:')
         self.campoBuscar = gtk.Entry()
-        self.campoBuscar.connect("activate", self.buscar)
+        self.campoBuscar.connect('activate', self.buscar)
         btBuscar = gtk.Button('Buscar')
         btBuscar.connect("clicked", self.buscar)
         btBuscar.set_size_request(80, 25)
@@ -86,9 +93,14 @@ class spto:
             print uri
         return True
 
+    def limparWebView(self, view):
+        self.view.load_html_string('', settings.URL_BASE)
+        self.buscaAtual = ''
+
     def sobre(self, view):
         sobre = open('../HTML/sobre.html', 'r').read() 
         self.view.load_html_string(sobre, settings.URL_BASE)
+        self.buscaAtual = ''
 
     def buscar(self, button):
         busca = self.campoBuscar.get_text()
