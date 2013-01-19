@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #coding: utf-8
 
 import gtk 
@@ -10,6 +11,7 @@ import re
 import threading
 import time
 import urllib2
+
 
 class sptoAPP:
     def __init__(self):
@@ -100,10 +102,10 @@ class sptoAPP:
 
     def estrutura_resultado(self, filmes):
         if filmes == None:
-            conteudo = open('naoEncontrado.html', 'r').read() 
+            conteudo = open('../HTML/naoEncontrado.html', 'r').read() 
             return conteudo
         else:
-            conteudo = open('titulos.html', 'r').read() 
+            conteudo = open('../HTML/titulos.html', 'r').read() 
             lista = []
             for filme in filmes['filmes']:
                 item = '<a href="http://graph.facebook.com/http://www.imdb.com{url}"><li class="well well-small titulo"><img src="{img}" height="44" width="32" /><span>{titulo}</span></li></a>'.format(
