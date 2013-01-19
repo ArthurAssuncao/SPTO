@@ -4,7 +4,11 @@ SPTO - Sistema de Pesquisa de Títulos Online
 Desenvolvedores:
 ----------------
 Mateus Ferreira Silva
+
 Arthur Assunção Nascimento
+
+Descrição:
+----------
 
 Trabalho final para a disciplina de WebServices do curso Tecnologia de Sistemas para Internet no Instituto Federal de Educação, Ciência e Tecnologia do Sudeste de Minas - Câmpus Barbacena.
 
