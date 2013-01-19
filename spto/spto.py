@@ -11,6 +11,7 @@ import re
 import threading
 import time
 import urllib2
+import os
 
 
 class spto:
@@ -33,9 +34,13 @@ class spto:
         arquivo = gtk.MenuItem('Arquivo')
         arquivo.set_submenu(menuArquivo)
 
-        limpar = gtk.MenuItem('Limpar pesquisa')
-        limpar.connect('activate', self.limparWebView)
-        menuArquivo.append(limpar)
+        limparPesquisa = gtk.MenuItem('Limpar Pesquisa')
+        limparPesquisa.connect('activate', self.limparWebView)
+        menuArquivo.append(limparPesquisa)
+
+        limparCache = gtk.MenuItem('Limpar Cache')
+        limparCache.connect('activate', self.limparCache)
+        menuArquivo.append(limparCache)
 
         sep = gtk.SeparatorMenuItem()
         menuArquivo.append(sep)
@@ -93,6 +98,12 @@ class spto:
             print uri
         return True
 
+    def limparCache(self, view):
+        for raiz, diretorios, arquivos in os.walk('../cache'):
+            for arquivo in arquivos:
+                if arquivo.endswith('.html'):
+                    os.remove(os.path.join(raiz, arquivo))
+
     def limparWebView(self, view):
         self.view.load_html_string('', settings.URL_BASE)
         self.buscaAtual = ''
@@ -104,10 +115,14 @@ class spto:
 
     def buscar(self, button):
         busca = self.campoBuscar.get_text()
+
         if len(busca) == 0:
             pass
         elif self.buscaAtual == busca:
             pass
+        elif self.verifica_cache(busca.lower()) != None:
+            self.buscaAtual = busca
+            self.view.load_html_string(self.verifica_cache(busca.lower()), settings.URL_BASE)
         else:
             print 'Realizando pesquisa para "{}"'.format(busca)
             self.buscaAtual = busca
@@ -117,7 +132,16 @@ class spto:
                 conteudo = self.estrutura_resultado(conteudo)
             elif resposta == 404:
                 conteudo = self.estrutura_resultado(None)
+            open('../cache/{}.html'.format(busca.lower()), 'w').write(conteudo)
+            print 'Criando arquivo de cache "{}.html"'.format(busca.lower())
             self.view.load_html_string(conteudo, settings.URL_BASE)
+
+    def verifica_cache(self, arquivo):
+        try:
+            conteudo = open('../cache/{}.html'.format(arquivo.lower())).read()
+            return conteudo
+        except IOError as e:
+            return None
 
     def estrutura_resultado(self, filmes):
         if filmes == None:
