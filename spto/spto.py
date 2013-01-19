@@ -13,7 +13,7 @@ import time
 import urllib2
 
 
-class sptoAPP:
+class spto:
     def __init__(self):
         self.buscaAtual = '' # armazena o conteúdo pesquisado atualmente
         self.view = webkit.WebView() 
@@ -38,10 +38,11 @@ class sptoAPP:
         menuArquivo.append(sair)
 
         menuCreditos = gtk.Menu()
-        creditos = gtk.MenuItem("Créditos")
-        creditos.set_submenu(menuCreditos)
+        sobre = gtk.MenuItem("Sobre")
+        sobre.set_submenu(menuCreditos)
+        sobre.connect("activate", self.sobre)
         menuBar.append(arquivo)
-        menuBar.append(creditos)
+        menuBar.append(sobre)
         vbox.pack_start(menuBar, False, False, 0)
 
         # Campo de busca
@@ -85,9 +86,15 @@ class sptoAPP:
             print uri
         return True
 
+    def sobre(self, view):
+        sobre = open('../HTML/sobre.html', 'r').read() 
+        self.view.load_html_string(sobre, settings.URL_BASE)
+
     def buscar(self, button):
         busca = self.campoBuscar.get_text()
-        if len(busca) == 0 or self.buscaAtual == busca:
+        if len(busca) == 0:
+            pass
+        elif self.buscaAtual == busca:
             pass
         else:
             print 'Realizando pesquisa para "{}"'.format(busca)
@@ -144,5 +151,5 @@ class sptoAPP:
       return self.retorna_lista(url)
 
 if __name__ == "__main__":
-    sptoAPP()
+    spto()
     gtk.main()
