@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css" rel="stylesheet">
+        <link href="http://twitter.github.com/bootstrap/assets/css/bootstrap-responsive.css" rel="stylesheet">
+        <style type="text/css">
+            body{
+                text-align: center;
+                margin-top: 10px;
+            }
+            p{
+                text-align: justify;
+            }
+            hr{
+                margin:20px 0 0 0;
+                padding:0;
+                border:0;
+                outline:0;
+                overflow:hidden;
+                height:20px;
+            }
+
+            hr:after{
+                content:"";
+                margin:0 auto;
+                position:relative;
+                top:-35px;
+                display:block;
+                width:95%;
+                height:16px;
+                box-shadow:0px 20px 10px #888;
+                -webkit-border-radius:50%;
+                -moz-border-radius:50%;
+                border-radius:50%;
+            }
+​
+        </style>
+    </head>
+    <body>
+        <div class"container">
+            <h3>{titulo}</h3>
+            <hr>
+            <p><strong>Descrição:</strong></p>
+            <p>{descricao}<p>
+            
+            <p><strong>Categoria:</strong> {categoria}</p>
+
+            <p><strong>Curtidas:</strong> {curtidas}</p>
+        </div>
+    </body>
+</html>

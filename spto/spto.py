@@ -2,7 +2,7 @@
 #coding: utf-8
 
 import gtk 
-import webkit 
+import webkit
 import thread
 import gobject
 import json
@@ -12,18 +12,21 @@ import threading
 import time
 import urllib2
 import os
+import popupTitulo
 
 
 class spto:
     def __init__(self):
         self.buscaAtual = '' # armazena o conteúdo pesquisado atualmente
+        
         self.view = webkit.WebView() 
         self.view.connect('navigation-requested', self.on_click_link)
-        win = gtk.Window(gtk.WINDOW_TOPLEVEL)
-        win.set_title('SPTO - Sistema de Pesquisa de Títulos Online')
-        win.set_size_request(800, 600)
-        win.set_position(gtk.WIN_POS_CENTER)
-        win.set_resizable(False)
+
+        self.win = gtk.Window(gtk.WINDOW_TOPLEVEL)
+        self.win.set_title('SPTO - Sistema de Pesquisa de Títulos Online')
+        self.win.set_size_request(800, 600)
+        self.win.set_position(gtk.WIN_POS_CENTER)
+        self.win.set_resizable(False)
 
         vbox = gtk.VBox(False, 2)
         hbox = gtk.HBox()
@@ -71,16 +74,15 @@ class spto:
         # Barra de Rolagem na webView
         scrolledwindow = gtk.ScrolledWindow()
         scrolledwindow.set_policy(gtk.POLICY_AUTOMATIC, gtk.POLICY_ALWAYS)
-        textview = gtk.TextView()
         scrolledwindow.add(self.view)
 
         # Adicionar hbox e scrolledwindow
         vbox.pack_start(hbox, False, False, 0)
         vbox.pack_end(scrolledwindow, True, True, 0)
 
-        win.add(vbox)
-        win.connect("destroy", gtk.main_quit) # Fechar ao clicar
-        win.show_all()
+        self.win.add(vbox)
+        self.win.connect("destroy", gtk.main_quit) # Fechar ao clicar
+        self.win.show_all()
 
     def on_click_link(self, view, frame, req, data=None):
         '''
@@ -96,6 +98,7 @@ class spto:
             print uri.split("/")[1]
         else: 
             print uri
+            popupTitulo.popup(uri)
         return True
 
     def limparCache(self, view):
