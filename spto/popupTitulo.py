@@ -28,8 +28,9 @@ class popup:
                 curtidas = dados['likes']
         else:
             print 'URL inválida'
+            return
 
-        conteudo = open('../HTML/descricaoTitulo.html', 'r').read()
+        conteudo = open('./HTML/descricaoTitulo.html', 'r').read()
         conteudo = conteudo.replace('{titulo}', titulo)
         conteudo = conteudo.replace('{descricao}', descricao)
         conteudo = conteudo.replace('{categoria}', categoria)

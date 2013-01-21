@@ -102,7 +102,7 @@ class spto:
         return True
 
     def limparCache(self, view):
-        for raiz, diretorios, arquivos in os.walk('../cache'):
+        for raiz, diretorios, arquivos in os.walk('./cache'):
             for arquivo in arquivos:
                 if arquivo.endswith('.html'):
                     os.remove(os.path.join(raiz, arquivo))
@@ -112,7 +112,7 @@ class spto:
         self.buscaAtual = ''
 
     def sobre(self, view):
-        sobre = open('../HTML/sobre.html', 'r').read() 
+        sobre = open('./HTML/sobre.html', 'r').read() 
         self.view.load_html_string(sobre, settings.URL_BASE)
         self.buscaAtual = ''
 
@@ -135,23 +135,23 @@ class spto:
                 conteudo = self.estrutura_resultado(conteudo)
             elif resposta == 404:
                 conteudo = self.estrutura_resultado(None)
-            open('../cache/{}.html'.format(busca.lower()), 'w').write(conteudo)
+            open('./cache/{}.html'.format(busca.lower()), 'w').write(conteudo)
             print 'Criando arquivo de cache "{}.html"'.format(busca.lower())
             self.view.load_html_string(conteudo, settings.URL_BASE)
 
     def verifica_cache(self, arquivo):
         try:
-            conteudo = open('../cache/{}.html'.format(arquivo.lower())).read()
+            conteudo = open('./cache/{}.html'.format(arquivo.lower())).read()
             return conteudo
         except IOError as e:
             return None
 
     def estrutura_resultado(self, filmes):
         if filmes == None:
-            conteudo = open('../HTML/naoEncontrado.html', 'r').read() 
+            conteudo = open('./HTML/naoEncontrado.html', 'r').read() 
             return conteudo
         else:
-            conteudo = open('../HTML/titulos.html', 'r').read() 
+            conteudo = open('./HTML/titulos.html', 'r').read() 
             lista = []
             for filme in filmes['filmes']:
                 item = '<a href="http://graph.facebook.com/http://www.imdb.com{url}"><li class="well well-small titulo"><img src="{img}" height="44" width="32" /><span>{titulo}</span></li></a>'.format(
