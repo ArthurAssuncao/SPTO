@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 #coding: utf-8
 
+#author: Mateus Ferreira Silva
+#author: Arthur Assuncao
+
 import gtk 
 import webkit
-import thread
-import gobject
-import json
 import settings
 import re
-import threading
-import time
-import urllib2
+import requests
 import os
 import popupTitulo
 
@@ -162,7 +160,7 @@ class spto:
             return conteudo
 
     def retorna_lista(self, url):
-        html = urllib2.urlopen(url).read()
+        html = requests.get(url).content
         itens = re.findall(r'<td class="primary_photo">.*?<img.*?src="(.+?)".*?></a> </td>.*?<td class="result_text"> <a href="(.+?)".*?>(.+?)</td>', html)
         filmes = {'filmes' : []}
         if len(itens) > 0:

@@ -27,7 +27,7 @@ class popup:
             if 'likes' in dados:
                 curtidas = dados['likes']
         else:
-            print 'URL inválida'
+            print 'Erro: {}'.format(r.status_code)
             return
 
         conteudo = open('./HTML/descricaoTitulo.html', 'r').read()
