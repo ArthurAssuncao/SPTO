@@ -117,7 +117,7 @@ class spto:
         self.buscaAtual = ''
 
     def buscar(self, button):
-        busca = self.campoBuscar.get_text()
+        busca = self.campoBuscar.get_text().strip()
 
         if len(busca) == 0:
             pass
