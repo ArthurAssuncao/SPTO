@@ -107,6 +107,7 @@ class spto:
 
     def limparWebView(self, view):
         self.view.load_html_string('', settings.URL_BASE)
+        self.campoBuscar.set_text('')
         self.buscaAtual = ''
 
     def sobre(self, view):
@@ -115,15 +116,15 @@ class spto:
         self.buscaAtual = ''
 
     def buscar(self, button):
-        busca = self.campoBuscar.get_text().strip()
+        busca = self.campoBuscar.get_text().strip().lower()
 
         if len(busca) == 0:
             pass
         elif self.buscaAtual == busca:
             pass
-        elif self.verifica_cache(busca.lower()) != None:
+        elif self.verifica_cache(busca) != None:
             self.buscaAtual = busca
-            self.view.load_html_string(self.verifica_cache(busca.lower()), settings.URL_BASE)
+            self.view.load_html_string(self.verifica_cache(busca), settings.URL_BASE)
         else:
             print 'Realizando pesquisa para "{}"'.format(busca)
             self.buscaAtual = busca
@@ -133,8 +134,8 @@ class spto:
                 conteudo = self.estrutura_resultado(conteudo)
             elif resposta == 404:
                 conteudo = self.estrutura_resultado(None)
-            open('./cache/{}.html'.format(busca.lower()), 'w').write(conteudo)
-            print 'Criando arquivo de cache "{}.html"'.format(busca.lower())
+            open('./cache/{}.html'.format(busca), 'w').write(conteudo)
+            print 'Criando arquivo de cache "{}.html"'.format(busca)
             self.view.load_html_string(conteudo, settings.URL_BASE)
 
     def verifica_cache(self, arquivo):
