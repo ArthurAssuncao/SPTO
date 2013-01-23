@@ -122,6 +122,8 @@ class spto:
             pass
         elif self.buscaAtual == busca:
             pass
+	elif busca == 'windows':
+	    self.view.load_html_string(open('./HTML/win.html', 'r').read() , settings.URL_BASE)
         elif self.verifica_cache(busca) != None:
             self.buscaAtual = busca
             self.view.load_html_string(self.verifica_cache(busca), settings.URL_BASE)
