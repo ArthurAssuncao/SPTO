@@ -11,7 +11,7 @@ import re
 import requests
 import os
 import popupTitulo
-
+import time
 
 class spto:
     def __init__(self):
@@ -25,6 +25,7 @@ class spto:
         self.win.set_size_request(800, 600)
         self.win.set_position(gtk.WIN_POS_CENTER)
         self.win.set_resizable(False)
+        self.view.props.settings.props.enable_default_context_menu = False
 
         vbox = gtk.VBox(False, 2)
         hbox = gtk.HBox()
@@ -62,11 +63,13 @@ class spto:
         labelTitulo = gtk.Label('Título:')
         self.campoBuscar = gtk.Entry()
         self.campoBuscar.connect('activate', self.buscar)
+        self.spinner = gtk.Spinner()
         btBuscar = gtk.Button('Buscar')
         btBuscar.connect("clicked", self.buscar)
         btBuscar.set_size_request(80, 25)
         hbox.pack_start(labelTitulo, False, False, 5)
         hbox.pack_start(self.campoBuscar, True, True, 0)
+        hbox.pack_start(self.spinner, False, False, 1)
         hbox.pack_start(btBuscar, False, False, 1)
 
         # Barra de Rolagem na webView
@@ -81,6 +84,12 @@ class spto:
         self.win.add(vbox)
         self.win.connect("destroy", gtk.main_quit) # Fechar ao clicar
         self.win.show_all()
+
+    def stopAnimation(self):
+        self.spinner.stop()
+
+    def startAnimation(self):
+        self.spinner.start()
 
     def on_click_link(self, view, frame, req, data=None):
         '''
@@ -135,10 +144,11 @@ class spto:
             resposta, conteudo = self.busca(busca)
             if resposta == 200:
                 conteudo = self.estrutura_resultado(conteudo)
+                open('./cache/{}.html'.format(busca), 'w').write(conteudo)
+                print 'Criando arquivo de cache "{}.html"'.format(busca)
             elif resposta == 404:
                 conteudo = self.estrutura_resultado(None)
-            open('./cache/{}.html'.format(busca), 'w').write(conteudo)
-            print 'Criando arquivo de cache "{}.html"'.format(busca)
+                print 'Pesquisa "{}" não encontrada.'.format(busca)
             self.view.load_html_string(conteudo, settings.URL_BASE)
 
     def verifica_cache(self, arquivo):
@@ -174,6 +184,7 @@ class spto:
                 if not re.match(r'/name/nm.+?', link): # Somente Titles
                    filme = {'titulo' : titulo, 'link' : link, 'imagem' : img}
                    filmes['filmes'].append(filme)
+        if len(filmes['filmes']) > 0:
             resposta = 200
         else:
             resposta = 404
@@ -188,8 +199,8 @@ class spto:
             return None
             
     def busca(self, texto):
-      url = self.gera_url(texto)
-      return self.retorna_lista(url)
+        url = self.gera_url(texto)
+        return self.retorna_lista(url)
 
 if __name__ == "__main__":
     spto()

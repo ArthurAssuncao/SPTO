@@ -1,5 +1,8 @@
 #coding: utf-8
 
+#author: Mateus Ferreira Silva
+#author: Arthur Assuncao
+
 import gtk
 import webkit
 import settings
@@ -45,6 +48,7 @@ class popup:
         self.win.set_resizable(False)
         color = gtk.gdk.color_parse('#fff')
         self.win.modify_bg(gtk.STATE_NORMAL, color)
+        self.view.props.settings.props.enable_default_context_menu = False
 
         vbox = gtk.VBox(False, 1)
 
