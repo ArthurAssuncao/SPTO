@@ -14,6 +14,13 @@ import popupTitulo
 import time
 
 class spto:
+    
+    def stopAnimation(self, view=None, frame=None):
+        self.spinner.stop()
+
+    def startAnimation(self, view=None, frame=None):
+        self.spinner.start()
+    
     def __init__(self):
         self.buscaAtual = '' # armazena o conteúdo pesquisado atualmente
         
@@ -26,6 +33,9 @@ class spto:
         self.win.set_position(gtk.WIN_POS_CENTER)
         self.win.set_resizable(False)
         self.view.props.settings.props.enable_default_context_menu = False
+        
+        self.view.connect("load-finished", self.stopAnimation)
+        self.view.connect("load-started", self.startAnimation)
 
         vbox = gtk.VBox(False, 2)
         hbox = gtk.HBox()
@@ -84,12 +94,6 @@ class spto:
         self.win.add(vbox)
         self.win.connect("destroy", gtk.main_quit) # Fechar ao clicar
         self.win.show_all()
-
-    def stopAnimation(self):
-        self.spinner.stop()
-
-    def startAnimation(self):
-        self.spinner.start()
 
     def on_click_link(self, view, frame, req, data=None):
         '''
