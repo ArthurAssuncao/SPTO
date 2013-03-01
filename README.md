@@ -20,3 +20,9 @@ Requerimentos
 Bibliotéca <i>requests</i>
 
 Modo de instalar: <i>sudo apt-get install python-requests</i>
+
+## Screenshots
+
+![ft1](https://raw.github.com/mtsferreirasilva/SPTO/master/imagens/ft1.png)
+![ft2](https://raw.github.com/mtsferreirasilva/SPTO/master/imagens/ft2.png)
+![ft3](https://raw.github.com/mtsferreirasilva/SPTO/master/imagens/ft3.png)
